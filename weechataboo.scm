@@ -17,7 +17,6 @@
 ; For usage see `/help weechataboo`
 
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 regex))
 
 ; -> List
 ; Returns a list of available emotions.
@@ -37,10 +36,22 @@
 ; Replaces in the given string every ~~EMOTION with a fitting emoticon.
 (define (emoticonize-line line)
   (let*
-    ((match->emoticon (lambda (m) (emotion->emoticon (string-drop m 2))))
-     (match-func      (lambda (m) (match->emoticon (match:substring m))))
-     (regexp (string-append "~~(" (string-join (emotion-categories) "|") ")")))
-    (regexp-substitute/global #f regexp line 'pre match-func 'post)))
+    ((as-tag (lambda (emo) (string-append "~~" emo)))
+     (has-emotions? (lambda (txt)
+                      (any (lambda (emo)
+                             (number? (string-contains txt (as-tag emo))))
+                           (emotion-categories))))
+     (replace (lambda (emo txt)
+                (let ((pos (string-contains txt (as-tag emo))))
+                  (if (number? pos)
+                    (string-replace
+                      txt (emotion->emoticon emo)
+                      pos (+ (string-length (as-tag emo)) pos))
+                    txt))))
+     (new-line (fold replace line (emotion-categories))))
+    (if (has-emotions? new-line)
+      (emoticonize-line new-line)
+      new-line)))
 
 ; Pointer String String -> Weechat-Return 
 ; This function was registered to be called when an input was submitted and

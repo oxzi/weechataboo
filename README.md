@@ -3,7 +3,8 @@ WeeChat + Weeaboo faces = *Weechataboo*
 
 A [WeeChat](https://weechat.org/)-Script to replace emotion-tags with
 random emoticon. Emotion tags in text are starting with `~~`. The text
-`hello ~~hug` will be `hello (っ´▽｀)っ`. \
+`hello ~~hug` will be `hello (っ´▽｀)っ`.
+
 Oh. It's written in Scheme.
 
 ```
