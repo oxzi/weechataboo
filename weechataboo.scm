@@ -115,7 +115,7 @@
 
 
 (weechat:register
-  "weechataboo" "Alvar" "0.1" "GPL3"
+  "weechataboo" "Alvar" "0.1.1" "GPL3"
   "Replace emotion-tags with random emoticons" "clean-up" "")
 
 (and (eq? (weechat:config_is_set_plugin "emotions") 0)
